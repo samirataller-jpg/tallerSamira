@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-paper bg-paper-grain bg-[length:14px_14px] text-ink-900 antialiased font-sans;
+  }
+
+  ::selection {
+    @apply bg-brand-200/80 text-ink-950;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-md shadow-brand-500/25 transition hover:bg-brand-600 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-paper;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-ink-900/15 bg-surface px-6 py-3 text-base font-semibold text-ink-900 shadow-sm transition hover:border-brand-500/40 hover:bg-ink-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-paper;
+  }
+
+  .section {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-md border border-brand-500/35 bg-brand-50 px-3 py-1 text-xs font-bold uppercase tracking-widest text-brand-700;
+  }
+}
