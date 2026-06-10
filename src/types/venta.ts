@@ -20,7 +20,7 @@ export interface ArticuloVenta {
   descripcionCorto: string;
   precio: number;
   moneda: "ARS" | "USD";
-  imagenUrl: string;
+  imagenUrl?: string | null;
   imagen?: ImagenSanity;
   estado: EstadoVenta;
   categoria?: "vehiculo" | "repuesto" | "herramienta" | "accesorio";

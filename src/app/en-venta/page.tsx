@@ -2,8 +2,12 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { VentasCatalogo } from "@/components/sections/VentasCatalogo";
-import { mockVentas } from "@/data/mockVentas";
+import { client } from "@/sanity/client";
+import { TODOS_LOS_ARTICULOS_QUERY } from "@/sanity/queries/ventas";
+import type { ArticuloVenta } from "@/types/venta";
 import { BUSINESS } from "@/lib/constants";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "En venta",
@@ -14,8 +18,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function EnVentaPage() {
-  // TODO: Reemplazar este Mock con el fetch a Sanity.io usando GROQ.
+export default async function EnVentaPage() {
+  const articulos: ArticuloVenta[] = await client.fetch(TODOS_LOS_ARTICULOS_QUERY);
 
   return (
     <main className="min-h-screen bg-paper pt-24 sm:pt-28">
@@ -40,7 +44,7 @@ export default function EnVentaPage() {
         </header>
 
         <div className="mt-12">
-          <VentasCatalogo articulos={mockVentas} />
+          <VentasCatalogo articulos={articulos} />
         </div>
       </div>
     </main>
