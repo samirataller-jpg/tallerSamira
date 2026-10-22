@@ -3,18 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { Contacto } from "@/components/sections/Contacto";
 import { Hero } from "@/components/sections/Hero";
 import { Servicios } from "@/components/sections/Servicios";
-import { CardVenta } from "@/components/ui/CardVenta";
-import { client } from "@/sanity/client";
-import { ARTICULOS_DESTACADOS_QUERY } from "@/sanity/queries/ventas";
-import type { ArticuloVenta } from "@/types/venta";
+import { NotaPrecios } from "@/components/ui/NotaPrecios";
+import { VentasGrid } from "@/components/ui/VentasGrid";
+import { getArticulosDestacados } from "@/lib/ventas";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const ventasDestacadas: ArticuloVenta[] = await client.fetch(
-    ARTICULOS_DESTACADOS_QUERY,
-    { limit: 3 },
-  );
+  const ventasDestacadas = await getArticulosDestacados();
 
   return (
     <main>
@@ -44,15 +40,8 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {ventasDestacadas.map((articulo, idx) => (
-                <CardVenta
-                  key={articulo._id}
-                  articulo={articulo}
-                  priority={idx === 0}
-                />
-              ))}
-            </div>
+            <VentasGrid articulos={ventasDestacadas} priorityCount={1} />
+            <NotaPrecios />
           </div>
         </section>
       )}

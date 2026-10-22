@@ -2,9 +2,7 @@ import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { VentasCatalogo } from "@/components/sections/VentasCatalogo";
-import { client } from "@/sanity/client";
-import { TODOS_LOS_ARTICULOS_QUERY } from "@/sanity/queries/ventas";
-import type { ArticuloVenta } from "@/types/venta";
+import { getArticulosVenta } from "@/lib/ventas";
 import { BUSINESS } from "@/lib/constants";
 
 export const revalidate = 60;
@@ -19,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EnVentaPage() {
-  const articulos: ArticuloVenta[] = await client.fetch(TODOS_LOS_ARTICULOS_QUERY);
+  const articulos = await getArticulosVenta();
 
   return (
     <main className="min-h-screen bg-paper pt-24 sm:pt-28">

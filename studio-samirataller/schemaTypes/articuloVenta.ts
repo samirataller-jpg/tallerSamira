@@ -28,8 +28,15 @@ export const articuloVenta = defineType({
       validation: (r) => r.required().max(300),
     }),
     defineField({
+      name: "descripcionLarga",
+      title: "Descripción completa",
+      type: "array",
+      of: [{ type: "block" }],
+      description: "Texto largo del modal de detalle.",
+    }),
+    defineField({
       name: "imagen",
-      title: "Imagen",
+      title: "Imagen principal",
       type: "image",
       options: { hotspot: true },
       fields: [
@@ -42,10 +49,29 @@ export const articuloVenta = defineType({
       ],
     }),
     defineField({
+      name: "galeria",
+      title: "Galería",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Texto alternativo",
+              type: "string",
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
       name: "precio",
       title: "Precio",
       type: "number",
-      validation: (r) => r.required().positive(),
+      description: "Opcional. Si está vacío, la web muestra “Consultar”.",
+      validation: (r) => r.positive(),
     }),
     defineField({
       name: "moneda",
@@ -106,6 +132,36 @@ export const articuloVenta = defineType({
       title: "Kilometraje",
       type: "number",
       description: "Solo para vehículos",
+    }),
+    defineField({
+      name: "combustible",
+      title: "Combustible",
+      type: "string",
+      options: {
+        list: [
+          { title: "Nafta", value: "Nafta" },
+          { title: "Diesel", value: "Diesel" },
+          { title: "GNC", value: "GNC" },
+          { title: "Híbrido", value: "Híbrido" },
+          { title: "Eléctrico", value: "Eléctrico" },
+        ],
+      },
+    }),
+    defineField({
+      name: "transmision",
+      title: "Transmisión",
+      type: "string",
+      options: {
+        list: [
+          { title: "Manual", value: "Manual" },
+          { title: "Automática", value: "Automática" },
+        ],
+      },
+    }),
+    defineField({
+      name: "color",
+      title: "Color",
+      type: "string",
     }),
   ],
   preview: {

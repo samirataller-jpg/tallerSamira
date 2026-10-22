@@ -20,6 +20,7 @@ export const BUSINESS = {
   ],
   social: {
     instagram: "https://www.instagram.com/taller.juancar/",
+    tiktok: "https://www.tiktok.com/@juanochoa.juancar?_r=1&_t=ZS-9AkXmlvGcia",
     google:
       "https://synara.ar/directorio-de-empresas/empresa/taller-juancar-109713",
   },

@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import clsx from "clsx";
 import type { ArticuloVenta, EstadoVenta } from "@/types/venta";
-import { CardVenta } from "@/components/ui/CardVenta";
+import { NotaPrecios } from "@/components/ui/NotaPrecios";
+import { VentasGrid } from "@/components/ui/VentasGrid";
 
 type Filtro = "todos" | EstadoVenta;
 
@@ -53,13 +54,12 @@ export function VentasCatalogo({ articulos }: { articulos: ArticuloVenta[] }) {
           No hay publicaciones con este estado por ahora.
         </p>
       ) : (
-        <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtrados.map((articulo, idx) => (
-            <li key={articulo._id}>
-              <CardVenta articulo={articulo} priority={idx < 3} />
-            </li>
-          ))}
-        </ul>
+        <>
+          <div className="mt-10">
+            <VentasGrid articulos={filtrados} priorityCount={4} />
+          </div>
+          <NotaPrecios />
+        </>
       )}
     </div>
   );

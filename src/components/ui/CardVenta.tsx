@@ -1,13 +1,17 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Calendar, Gauge, MessageCircle } from "lucide-react";
+import { Calendar, Gauge } from "lucide-react";
 import clsx from "clsx";
 import type { ArticuloVenta, EstadoVenta } from "@/types/venta";
-import { BUSINESS } from "@/lib/constants";
+import {
+  formatPrecio,
+  tienePrecioDefinido,
+  urlImagenArticulo,
+} from "@/lib/venta-format";
 
 interface CardVentaProps {
   articulo: ArticuloVenta;
   priority?: boolean;
+  onOpen?: (articulo: ArticuloVenta) => void;
 }
 
 const estadoStyles: Record<
@@ -28,48 +32,45 @@ const estadoStyles: Record<
   },
 };
 
-function formatPrecio(precio: number, moneda: "ARS" | "USD") {
-  const locale = moneda === "USD" ? "en-US" : "es-AR";
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: moneda,
-    maximumFractionDigits: 0,
-  }).format(precio);
-}
-
-export function CardVenta({ articulo, priority = false }: CardVentaProps) {
+export function CardVenta({
+  articulo,
+  priority = false,
+  onOpen,
+}: CardVentaProps) {
   const {
     titulo,
     descripcionCorto,
     precio,
     moneda,
-    imagenUrl,
     estado,
     kilometraje,
     anio,
+    imagen,
   } = articulo;
 
   const estadoCfg = estadoStyles[estado];
-  const disponible = estado === "disponible";
-
-  const whatsappUrl = `https://wa.me/${BUSINESS.phoneRaw}?text=${encodeURIComponent(
-    `Hola! Me interesa "${titulo}" publicado en la web de Taller Juancar.`,
-  )}`;
+  const src = urlImagenArticulo(articulo, 800, 600);
+  const alt = imagen?.alt?.trim() || titulo;
+  const tienePrecio = tienePrecioDefinido(precio);
+  const precioVisible = tienePrecio
+    ? formatPrecio(precio, moneda)
+    : "Consultar";
 
   return (
     <article
       className={clsx(
-        "group relative flex flex-col overflow-hidden rounded-xl border-2 border-ink-200 bg-surface shadow-md transition hover:-translate-y-1 hover:border-brand-500/45 hover:shadow-xl",
-        !disponible && "opacity-95",
+        "group relative flex h-full flex-col overflow-hidden rounded-xl border-2 border-ink-200 bg-surface shadow-md transition-all hover:-translate-y-1 hover:border-brand-500/45 hover:shadow-lg",
+        onOpen && "cursor-pointer",
       )}
+      onClick={onOpen ? () => onOpen(articulo) : undefined}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-ink-100">
-        {imagenUrl ? (
+        {src ? (
           <Image
-            src={imagenUrl}
-            alt={titulo}
+            src={src}
+            alt={alt}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
             className="object-cover transition duration-500 group-hover:scale-105"
             priority={priority}
           />
@@ -119,30 +120,29 @@ export function CardVenta({ articulo, priority = false }: CardVentaProps) {
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-2">
           <div>
-            <p className="text-[11px] font-bold uppercase tracking-widest text-ink-500">
-              Precio
+            <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
+              Desde
             </p>
             <p className="font-display text-xl font-extrabold text-ink-950">
-              {formatPrecio(precio, moneda)}
+              {precioVisible}
+              {tienePrecio && (
+                <sup className="ml-0.5 text-sm font-semibold text-neutral-500">*</sup>
+              )}
             </p>
           </div>
 
-          <Link
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-disabled={!disponible}
-            tabIndex={disponible ? 0 : -1}
-            className={clsx(
-              "inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition",
-              disponible
-                ? "bg-brand-500 text-white shadow-sm hover:bg-brand-600"
-                : "pointer-events-none border border-ink-200 bg-ink-100 text-ink-500",
-            )}
-          >
-            <MessageCircle className="h-4 w-4" aria-hidden />
-            Consultar
-          </Link>
+          {onOpen && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpen(articulo);
+              }}
+              className="inline-flex items-center rounded-lg border-2 border-ink-200 bg-surface px-3 py-2 text-xs font-bold uppercase tracking-wide text-ink-800 transition hover:border-brand-500/40 hover:bg-ink-50"
+            >
+              Ver detalle
+            </button>
+          )}
         </div>
       </div>
     </article>
