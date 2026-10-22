@@ -258,7 +258,7 @@ export function ModalDetalleVenta({ articulo, onClose }: ModalDetalleVentaProps)
               </p>
               <p className="font-display text-2xl font-extrabold text-ink-950">
                 {tienePrecio
-                  ? formatPrecio(articulo.precio, articulo.moneda)
+                  ? formatPrecio(articulo.precio!, articulo.moneda)
                   : "Consultar"}
                 {tienePrecio && (
                   <sup className="ml-0.5 text-sm font-semibold text-neutral-500">
